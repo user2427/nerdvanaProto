@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nerdvana Prototype - Upgraded Interface</title>
+  <style>
+    /* Global Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      min-height: 100vh;
+    }
+    
+    /* Header / Navigation Bar */
+    header {
+      background: #4a90e2;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .logo h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1em;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: #e0e0e0;
+    }
+    nav input[type="text"] {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1em;
+    }
+    nav input[type="text"]:focus {
+      outline: none;
+    }
+    
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Create Chatroom Button */
+    .create-chatroom {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .create-chatroom button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      background: #4a90e2;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .create-chatroom button:hover {
+      background: #3a78c2;
+    }
+    
+    /* Chatroom Categories & Cards */
+    .chatroom-category {
+      margin-bottom: 30px;
+    }
+    .chatroom-category h2 {
+      margin-bottom: 10px;
+      font-size: 1.4em;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+    .chatroom-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .chatroom-card {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      width: calc(33.333% - 20px);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .chatroom-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .chatroom-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.2em;
+      color: #333;
+    }
+    .chatroom-card p {
+      font-size: 0.9em;
+      color: #666;
+    }
+    @media (max-width: 768px) {
+      .chatroom-card {
+        width: calc(50% - 20px);
+      }
+    }
+    @media (max-width: 480px) {
+      .chatroom-card {
+        width: 100%;
+      }
+    }
+    
+    /* Chatroom View Styling */
+    .chatroom-view {
+      display: none; /* Hidden by default */
+      height: calc(100vh - 60px); /* Adjust based on header height */
+      flex-direction: column;
+    }
+    .chatroom-header {
+      background: #4a90e2;
+      color: #fff;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .back-button {
+      padding: 5px 10px;
+      font-size: 1em;
+      background: #fff;
+      color: #4a90e2;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .back-button:hover {
+      background: #e0e0e0;
+    }
+    .chatroom-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #f9f9f9;
+    }
+    .message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .chatroom-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    .chatroom-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 1em;
+      border-right: 1px solid #ddd;
+    }
+    .chatroom-input button {
+      padding: 10px 15px;
+      border: none;
+      background: #4a90e2;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .chatroom-input button:hover {
+      background: #3a78c2;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header>
+    <div class="logo">
+      <h1>Nerdvana</h1>
+    </div>
+    <nav>
+      <input type="text" placeholder="Search chatrooms..." />
+      <a href="#shop">Shop</a>
+      <a href="#profile">Profile</a>
+    </nav>
+  </header>
+
+  <!-- Dashboard Container (Chatroom List) -->
+  <div id="dashboard" class="container">
+    <!-- Create Chatroom Button -->
+    <div class="create-chatroom">
+      <button onclick="alert('Create Chatroom Modal - Coming Soon!')">+ Create Chatroom</button>
+    </div>
+
+    <!-- Chatroom Categories -->
+    <div class="chatroom-category">
+      <h2>Physics</h2>
+      <div class="chatroom-list">
+        <div class="chatroom-card" onclick="openChatroom('Quantum Mechanics Q&amp;A', 'Discuss quantum theories and breakthroughs.')">
+          <h3>Quantum Mechanics Q&amp;A</h3>
+          <p>Discuss quantum theories and breakthroughs.</p>
+        </div>
+        <div class="chatroom-card" onclick="openChatroom('Astronomy Corner', 'Talk about stars, galaxies, and space exploration.')">
+          <h3>Astronomy Corner</h3>
+          <p>Talk about stars, galaxies, and space exploration.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatroom-category">
+      <h2>Art</h2>
+      <div class="chatroom-list">
+        <div class="chatroom-card" onclick="openChatroom('Digital Art Hub', 'Share digital artwork and creative tips.')">
+          <h3>Digital Art Hub</h3>
+          <p>Share digital artwork and creative tips.</p>
+        </div>
+        <div class="chatroom-card" onclick="openChatroom('Traditional Techniques', 'Discuss painting, sculpture, and more.')">
+          <h3>Traditional Techniques</h3>
+          <p>Discuss painting, sculpture, and more.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatroom-category">
+      <h2>Anime</h2>
+      <div class="chatroom-list">
+        <div class="chatroom-card" onclick="openChatroom('Naruto Fan Club', 'For fans of Naruto and other popular anime.')">
+          <h3>Naruto Fan Club</h3>
+          <p>For fans of Naruto and other popular anime.</p>
+        </div>
+        <div class="chatroom-card" onclick="openChatroom('Studio Ghibli Lounge', 'Talk about your favorite Ghibli films.')">
+          <h3>Studio Ghibli Lounge</h3>
+          <p>Talk about your favorite Ghibli films.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatroom-category">
+      <h2>Comics</h2>
+      <div class="chatroom-list">
+        <div class="chatroom-card" onclick="openChatroom('Marvel Universe', 'Discussion about Marvel comics and movies.')">
+          <h3>Marvel Universe</h3>
+          <p>Discussion about Marvel comics and movies.</p>
+        </div>
+        <div class="chatroom-card" onclick="openChatroom('DC Discussion', 'Share theories and updates on DC Comics.')">
+          <h3>DC Discussion</h3>
+          <p>Share theories and updates on DC Comics.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatroom View Container -->
+  <div id="chatroomView" class="chatroom-view">
+    <div class="chatroom-header">
+      <button onclick="closeChatroom()" class="back-button">Back</button>
+      <h2 id="chatroomTitle">Chatroom Name</h2>
+      <div style="width: 60px;"></div>
+    </div>
+    <div id="chatroomMessages" class="chatroom-messages">
+      <!-- Messages will appear here -->
+    </div>
+    <div class="chatroom-input">
+      <input type="text" id="messageInput" placeholder="Type your message..." onkeydown="if(event.key === 'Enter'){ sendMessage(); }" />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Global variables to simulate chatroom messages storage
+    let currentChatroom = '';
+    let messages = [];
+
+    // Function to open a chatroom
+    function openChatroom(name, description) {
+      currentChatroom = name;
+      document.getElementById('chatroomTitle').textContent = name;
+      
+      // Retrieve saved messages for this chatroom from local storage, if any
+      const savedMessages = localStorage.getItem(`chatroom_${currentChatroom}`);
+      messages = savedMessages ? JSON.parse(savedMessages) : [];
+      renderMessages();
+
+      // Hide dashboard and show chatroom view
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('chatroomView').style.display = 'flex';
+    }
+
+    // Function to close the chatroom and return to dashboard
+    function closeChatroom() {
+      document.getElementById('chatroomView').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+
+    // Function to send a message
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (text === '') return;
+
+      // Add message to messages array and save in local storage for current chatroom
+      messages.push(text);
+      localStorage.setItem(`chatroom_${currentChatroom}`, JSON.stringify(messages));
+      
+      input.value = '';
+      renderMessages();
+    }
+
+    // Function to render messages in the chatroom view
+    function renderMessages() {
+      const chatroomMessages = document.getElementById('chatroomMessages');
+      chatroomMessages.innerHTML = ''; // Clear previous messages
+
+      messages.forEach((msg) => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.textContent = msg;
+        chatroomMessages.appendChild(messageDiv);
+      });
+      
+      // Auto-scroll to the bottom of the messages container
+      chatroomMessages.scrollTop = chatroomMessages.scrollHeight;
+    }
+  </script>
+</body>
+</html>
